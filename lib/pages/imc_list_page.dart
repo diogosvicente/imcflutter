@@ -48,8 +48,12 @@ class _ImcListPageState extends State<ImcListPage> {
                         Expanded(
                           child: TextField(
                             controller: nomeController,
-                            decoration:
-                                const InputDecoration(labelText: 'Nome'),
+                            decoration: InputDecoration(
+                              labelText: 'Nome',
+                              errorText: nomeController.text.isNotEmpty
+                                  ? 'Nome deve ser preenchido'
+                                  : null,
+                            ),
                           ),
                         ),
                         TextField(
@@ -77,6 +81,7 @@ class _ImcListPageState extends State<ImcListPage> {
                             if (nomeController.text.trim() == "") {
                               ScaffoldMessenger.of(context).showSnackBar(
                                   const SnackBar(
+                                      clipBehavior: Clip.hardEdge,
                                       content:
                                           Text("Nome deve ser preenchido")));
                               return;
@@ -101,7 +106,6 @@ class _ImcListPageState extends State<ImcListPage> {
                                   const SnackBar(
                                       content:
                                           Text("Dados salvos com sucesso!")));
-                              //salvando = true;
                             });
                             try {
                               pesoDouble = double.parse(pesoController.text);
@@ -128,7 +132,8 @@ class _ImcListPageState extends State<ImcListPage> {
           itemCount: _pessoas.length,
           itemBuilder: (BuildContext bc, int index) {
             var pessoa = _pessoas[index];
-            return Text(pessoa.getNome());
+            return Text(
+                '${pessoa.getNome()} Peso: ${pessoa.getPeso()} Altura: ${pessoa.getAltura()} IMC: ${pessoa.calcularImc()} - ${pessoa.classificarImc()}');
           }),
     );
   }
