@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:imcflutter/model/pessoa.dart';
 import 'package:imcflutter/repository/pessoa_repository.dart';
-import 'calcular_imc_page.dart'; // Importe a classe Pessoa do arquivo pessoa.dart
 
 class ImcListPage extends StatefulWidget {
   const ImcListPage({Key? key}) : super(key: key);
@@ -23,10 +22,10 @@ class _ImcListPageState extends State<ImcListPage> {
   @override
   void initState() {
     super.initState();
-    obterTarefas();
+    carregarImcCalculados();
   }
 
-  void obterTarefas() {
+  void carregarImcCalculados() {
     _pessoas = pessoaRepository.listar();
     setState(() {});
   }
@@ -34,10 +33,13 @@ class _ImcListPageState extends State<ImcListPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(title: const Text("Calculadora IMC")),
       floatingActionButton: FloatingActionButton(
           child: const Icon(Icons.add),
           onPressed: () {
-            //descricaoController.text = "";
+            nomeController.text = "";
+            pesoController.text = "";
+            alturaController.text = "";
             showDialog(
                 context: context,
                 builder: (BuildContext bc) {
@@ -48,11 +50,8 @@ class _ImcListPageState extends State<ImcListPage> {
                         Expanded(
                           child: TextField(
                             controller: nomeController,
-                            decoration: InputDecoration(
+                            decoration: const InputDecoration(
                               labelText: 'Nome',
-                              errorText: nomeController.text.isNotEmpty
-                                  ? 'Nome deve ser preenchido'
-                                  : null,
                             ),
                           ),
                         ),
@@ -118,8 +117,8 @@ class _ImcListPageState extends State<ImcListPage> {
                             } catch (e) {
                               debugPrint('Erro ao converter para double: $e');
                             }
-                            pessoaRepository
-                                .adicionar(Pessoa(nomeController.text, 2, 10));
+                            pessoaRepository.adicionar(Pessoa(
+                                nomeController.text, pesoDouble, alturaDouble));
                             Navigator.pop(context);
                             setState(() {});
                           },
@@ -132,62 +131,12 @@ class _ImcListPageState extends State<ImcListPage> {
           itemCount: _pessoas.length,
           itemBuilder: (BuildContext bc, int index) {
             var pessoa = _pessoas[index];
-            return Text(
-                '${pessoa.getNome()} Peso: ${pessoa.getPeso()} Altura: ${pessoa.getAltura()} IMC: ${pessoa.calcularImc()} - ${pessoa.classificarImc()}');
+            return Container(
+              margin: const EdgeInsets.all(5),
+              child: Text(
+                  '${pessoa.getNome()} IMC: ${pessoa.calcularImc().toStringAsFixed(2)} - ${pessoa.classificarImc()}\nPeso: ${pessoa.getPeso()} Altura: ${pessoa.getAltura()}'),
+            );
           }),
     );
   }
 }
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    /*Scaffold(
-      appBar: AppBar(
-        title: const Text("Calculadora IMC"),
-      ),
-      drawer: Drawer(
-        child: Column(
-          children: [
-            InkWell(
-              child: Container(
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 50, horizontal: 10),
-                  width: double.infinity,
-                  child: const Row(
-                    children: [
-                      Icon(Icons.person),
-                      SizedBox(width: 5),
-                      Text("Calcular Novo IMC"),
-                    ],
-                  )),
-              onTap: () {
-                Navigator.pop(context);
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const CalcularImcPage()));
-              },
-            ),
-          ],
-        ),
-      ),
-      body: ListView.builder(
-          itemCount: _pessoas.length,
-          itemBuilder: (BuildContext bc, int index) {
-            var pessoa = _pessoas[index];
-            return Text(pessoa.getNome());
-          }),
-    );
-  }
-}
-*/
