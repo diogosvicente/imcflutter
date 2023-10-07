@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:imcflutter/repository/pessoa_repository.dart';
 
 import '../model/pessoa.dart';
 
@@ -10,16 +11,19 @@ class CalcularImcPage extends StatefulWidget {
 }
 
 class _CalcularImcPageState extends State<CalcularImcPage> {
-  TextEditingController nomeController = TextEditingController();
-  TextEditingController pesoController = TextEditingController();
-  TextEditingController alturaController = TextEditingController();
+  var nomeController = TextEditingController();
+  var pesoController = TextEditingController();
+  var alturaController = TextEditingController();
+  double pesoDouble = 0.0;
+  double alturaDouble = 0.0;
   List<Pessoa> pessoas = [];
+  var pessoaRepository = PessoaRepository();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: const Text("Meus Dados"),
+          title: const Text("Informe os dados"),
         ),
         body: Padding(
           padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
@@ -63,7 +67,20 @@ class _CalcularImcPageState extends State<CalcularImcPage> {
                           content: Text("Dados salvos com sucesso!")));
                       //salvando = true;
                     });
+                    try {
+                      pesoDouble = double.parse(pesoController.text);
+                    } catch (e) {
+                      debugPrint('Erro ao converter para double: $e');
+                    }
+                    try {
+                      alturaDouble = double.parse(alturaController.text);
+                    } catch (e) {
+                      debugPrint('Erro ao converter para double: $e');
+                    }
+                    pessoaRepository.adicionar(
+                        Pessoa(nomeController.text, pesoDouble, alturaDouble));
                     Navigator.pop(context);
+                    setState(() {});
                   },
                   child: const Text("Salvar"))
             ],
@@ -71,3 +88,25 @@ class _CalcularImcPageState extends State<CalcularImcPage> {
         ));
   }
 }
+
+/*class ListaPessoasWidget extends StatelessWidget {
+  final List<Pessoa> pessoas;
+
+  ListaPessoasWidget({required this.pessoas});
+
+  @override
+  Widget build(BuildContext context) {
+    return ListView.builder(
+      itemCount: pessoas.length,
+      itemBuilder: (context, index) {
+        Pessoa pessoa = pessoas[index];
+        return ListTile(
+          title: Text('Nome: ${pessoa.getNome()}'),
+          subtitle:
+              Text('Peso: ${pessoa.getPeso()} kg | Altura: ${pessoa.getAltura()} m'),
+          trailing: Text('IMC: ${pessoa.calcularImc().toStringAsFixed(2)}'),
+        );
+      },
+    );
+  }
+}*/

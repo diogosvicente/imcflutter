@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:imcflutter/model/pessoa.dart';
-
+import 'package:imcflutter/repository/pessoa_repository.dart';
 import 'calcular_imc_page.dart'; // Importe a classe Pessoa do arquivo pessoa.dart
 
 class ImcListPage extends StatefulWidget {
@@ -11,31 +11,25 @@ class ImcListPage extends StatefulWidget {
 }
 
 class _ImcListPageState extends State<ImcListPage> {
-  TextEditingController nomeController = TextEditingController();
-  TextEditingController pesoController = TextEditingController();
-  TextEditingController alturaController = TextEditingController();
-  List<Pessoa> pessoas = [];
+  var pessoaRepository = PessoaRepository();
+  var _pessoas = const <Pessoa>[];
 
-  void calcularNovoIMC() {
-    String nome = nomeController.text;
-    double peso = double.parse(pesoController.text);
-    double altura = double.parse(alturaController.text);
+  @override
+  void initState() {
+    super.initState();
+    obterTarefas();
+  }
 
-    Pessoa pessoa = Pessoa(nome: nome, peso: peso, altura: altura);
-
-    setState(() {
-      pessoas.insert(0, pessoa);
-      nomeController.clear();
-      pesoController.clear();
-      alturaController.clear();
-    });
+  void obterTarefas() {
+    _pessoas = pessoaRepository.listar();
+    setState(() {});
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Main Page"),
+        title: const Text("Calculadora IMC"),
       ),
       drawer: Drawer(
         child: Column(
@@ -63,28 +57,12 @@ class _ImcListPageState extends State<ImcListPage> {
           ],
         ),
       ),
-      body: Column(
-        children: [
-          Expanded(
-            child: PageView(
-              //controller: controller,
-              onPageChanged: (value) {
-                setState(() {
-                  //posicaoPagina = value;
-                });
-              },
-              //scrollDirection: Axis.vertical,
-              children: const [
-                // CardPage(),
-                // ImageAssetsPage(),
-                // ListViewPage(),
-                // ListViewHorizontal(),
-                // TarefaPage()
-              ],
-            ),
-          ),
-        ],
-      ),
+      body: ListView.builder(
+          itemCount: _pessoas.length,
+          itemBuilder: (BuildContext bc, int index) {
+            var pessoa = _pessoas[index];
+            return Text(pessoa.getNome());
+          }),
     );
   }
 }
