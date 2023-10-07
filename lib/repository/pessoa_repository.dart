@@ -7,10 +7,6 @@ class PessoaRepository {
     _pessoas.add(pessoa);
   }
 
-  void remover(String id) {
-    _pessoas.remove(_pessoas.where((pessoa) => pessoa.id == id).first);
-  }
-
   List<Pessoa> listar() {
     return _pessoas;
   }
