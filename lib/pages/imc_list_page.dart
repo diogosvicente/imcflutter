@@ -1,30 +1,15 @@
 import 'package:flutter/material.dart';
-<<<<<<< HEAD
-
-class ImcListPage extends StatefulWidget {
-  const ImcListPage({super.key});
-=======
 import 'package:imcflutter/model/pessoa.dart';
 import 'package:imcflutter/repository/pessoa_repository.dart';
 
 class ImcListPage extends StatefulWidget {
   const ImcListPage({Key? key}) : super(key: key);
->>>>>>> novo_branch
 
   @override
   State<ImcListPage> createState() => _ImcListPageState();
 }
 
 class _ImcListPageState extends State<ImcListPage> {
-<<<<<<< HEAD
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text("Calculadora IMC"),
-      ),
-      body: ListView(children: [Text("test")]),
-=======
   var nomeController = TextEditingController();
   var pesoController = TextEditingController();
   var alturaController = TextEditingController();
@@ -148,7 +133,6 @@ class _ImcListPageState extends State<ImcListPage> {
                   '${pessoa.getNome()} IMC: ${pessoa.calcularImc().toStringAsFixed(2)} - ${pessoa.classificarImc()}\nPeso: ${pessoa.getPeso()} Altura: ${pessoa.getAltura()}'),
             );
           }),
->>>>>>> novo_branch
     );
   }
 }
