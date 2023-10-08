@@ -1,7 +1,4 @@
-import 'package:flutter/material.dart';
-
 class Pessoa {
-  final String _id = UniqueKey().toString();
   String _nome = "";
   double _peso = 0;
   double _altura = 0;
@@ -11,8 +8,6 @@ class Pessoa {
     setPeso(peso);
     setAltura(altura);
   }
-
-  String get id => _id;
 
   void setNome(String nome) {
     _nome = nome;

@@ -47,12 +47,10 @@ class _ImcListPageState extends State<ImcListPage> {
                     title: const Text("Adicionar pessoa"),
                     content: Wrap(
                       children: [
-                        Expanded(
-                          child: TextField(
-                            controller: nomeController,
-                            decoration: const InputDecoration(
-                              labelText: 'Nome',
-                            ),
+                        TextField(
+                          controller: nomeController,
+                          decoration: const InputDecoration(
+                            labelText: 'Nome',
                           ),
                         ),
                         TextField(
@@ -80,7 +78,6 @@ class _ImcListPageState extends State<ImcListPage> {
                             if (nomeController.text.trim() == "") {
                               ScaffoldMessenger.of(context).showSnackBar(
                                   const SnackBar(
-                                      clipBehavior: Clip.hardEdge,
                                       content:
                                           Text("Nome deve ser preenchido")));
                               return;
@@ -99,7 +96,6 @@ class _ImcListPageState extends State<ImcListPage> {
                                           Text("Altura deve ser preenchida")));
                               return;
                             }
-
                             setState(() {
                               ScaffoldMessenger.of(context).showSnackBar(
                                   const SnackBar(
@@ -109,13 +105,13 @@ class _ImcListPageState extends State<ImcListPage> {
                             try {
                               pesoDouble = double.parse(pesoController.text);
                             } catch (e) {
-                              debugPrint('Erro ao converter para double: $e');
+                              pesoDouble = 0.0;
                             }
                             try {
                               alturaDouble =
                                   double.parse(alturaController.text);
                             } catch (e) {
-                              debugPrint('Erro ao converter para double: $e');
+                              alturaDouble = 0.0;
                             }
                             pessoaRepository.adicionar(Pessoa(
                                 nomeController.text, pesoDouble, alturaDouble));
